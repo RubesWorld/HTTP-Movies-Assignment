@@ -18,9 +18,22 @@ function Movie({ addToSavedList }) {
   const saveMovie = () => {
     addToSavedList(movie);
   };
+  // const { id } = props.match.params;
 
   const handleEditClick = () => {
-    push(`/update-movie/:id`);
+    push(`/update-movie/${params.id}`);
+  };
+
+  const handleDeleteClick = () => {
+    axios
+      .delete(`http://localhost:5000/api/movies/${params.id}`)
+      .then((res) => {
+        setMovie(res.data);
+        push(`/movies`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -40,6 +53,9 @@ function Movie({ addToSavedList }) {
       </div>
       <div className="edit-button" onClick={handleEditClick}>
         Edit
+      </div>
+      <div className="delete-button" onClick={handleDeleteClick}>
+        Delete
       </div>
     </div>
   );

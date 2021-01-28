@@ -14,36 +14,24 @@ const iniatialValues = {
   stars: [],
 };
 
-const UpdateMovie = (props) => {
+const AddMovie = (props) => {
   const { push } = useHistory();
-  const [movies, setMovies] = useState(iniatialValues);
+  const [addMovie, setAddMovie] = useState(iniatialValues);
   const { id } = useParams();
-
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/movies/${id}`)
-      .then((res) => {
-        console.log(res);
-        setMovies(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
 
   const handleChange = (e) => {
     e.persist();
     const { name, value } = e.target;
-    setMovies({
-      ...movies,
+    setAddMovie({
+      ...addMovie,
       [name]: value,
     });
   };
 
-  const handleSubmit = () => {
+  const movieSubmit = (e) => {
     e.preventDefault();
     axios
-      .put(`http://localhost:5000/api/movies/${id}`, movies)
+      .post(`"/api/movies"`, addMovie)
       .then((res) => {
         props.setMovieList(res.data);
         push("/movies");
@@ -51,15 +39,15 @@ const UpdateMovie = (props) => {
       .catch((err) => {
         console.log(err);
       });
-    setMovies(iniatialValues);
+    setAddMovie(iniatialValues);
   };
 
   return (
     <div className="movie-card">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={movieSubmit}>
         <TextField
           fullWidth
-          value={movies.title}
+          value={addMovie.title}
           onChange={handleChange}
           label="Title"
           name="title"
@@ -68,7 +56,7 @@ const UpdateMovie = (props) => {
         />
         <TextField
           fullWidth
-          value={movies.director}
+          value={addMovie.director}
           onChange={handleChange}
           label="Director"
           name="director"
@@ -77,7 +65,7 @@ const UpdateMovie = (props) => {
         />
         <TextField
           fullWidth
-          value={movies.metascore}
+          value={addMovie.metascore}
           onChange={handleChange}
           label="metascore"
           name="metascore"
@@ -86,7 +74,7 @@ const UpdateMovie = (props) => {
         />
         <TextField
           fullWidth
-          value={movies.stars}
+          value={addMovie.stars}
           onChange={handleChange}
           label="Stars"
           name="stars"
@@ -107,4 +95,4 @@ const UpdateMovie = (props) => {
   );
 };
 
-export default UpdateMovie;
+export default AddMovie;
